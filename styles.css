@@ -1,0 +1,40 @@
+body {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.gameboard {
+  display: grid;
+  grid-template-columns: repeat(3, 100px);
+  gap: 5px;
+}
+
+.square {
+  border: 2px solid black;
+  height: 100px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+h1 {
+  color: red;
+  transition: 0.4s;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+h1 i {
+  margin-left: 5px;
+}
+
+.red {
+  color: red;
+}
+
+.blue {
+  color: blue;
+}
