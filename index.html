@@ -9,6 +9,8 @@
   <script defer src="main.js"></script>
 </head>
 <body>
+  <div class="overlay hidden" id="overlay"></div>
+
     <h1 id = "turn">Player 1 Turn  <i class="fas fa-times"></i></h1>
     <section class="gameboard">
     <div id="1" class="square"></div>
@@ -21,5 +23,13 @@
     <div id="8" class="square"></div>
     <div id="9" class="square"></div>
     </section>
+
+    
+    <div class="modal hidden" id = "modal">
+      <div class = "modal-content">
+      <p id="victory">Congratulations</p>
+      <button id = "button">Play Again</button>
+    </div>      
+  </div>
 </body>
 </html>

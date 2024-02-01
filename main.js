@@ -1,10 +1,22 @@
 class game {
-  constructor(square, turn) {
+  constructor(square, turn, overlay, modal, victory, button) {
     this.square = square;
     this.turn = turn;
+    this.overlay = overlay;
+    this.modal = modal;
+    this.victory = victory;
+    this.button = button;
     this.init();
     this.player = 1;
-    this.state = [];
+    this.player1array = [];
+    this.player2array = [];
+    this.winningPatterns = [
+      [1, 2, 3], [4, 5, 6], [7, 8, 9],
+  [1, 4, 7], [2, 5, 8], [3, 6, 9],
+  [1, 5, 9], [3, 5, 7]             
+    ];
+    this.counter = 0;
+
   }
 
   init = () => {
@@ -18,6 +30,7 @@ class game {
         return;
       }
 
+
         if(this.player == 1)
         {
           const player1Icon = document.createElement('i');
@@ -28,9 +41,14 @@ class game {
           this.turn.innerHTML = 'Player 2 Turn  <i class="fas fa-circle"></i>';
           this.turn.classList.remove('red')
           this.turn.classList.add('blue');
-          this.state.push({ id: clickedSquare.id, player: this.player });
-          // console.log(this.state)
-          this.checkVictory(this.player);
+          this.player1array.push(Number(clickedSquare.id));
+
+          if(this.player1array.length >= 0)
+          {
+            this.checkVictory(this.player1array, this.player);
+          }
+
+          this.counter++;
           this.player++;
           
         }
@@ -39,65 +57,97 @@ class game {
         {
           const player2Icon = document.createElement('i');
           player2Icon.classList.add("fas");
-          player2Icon.classList.add("fa-circle")
+          player2Icon.classList.add("fa-circle");
           player2Icon.classList.add('blue');
           clickedSquare.appendChild(player2Icon);
           this.turn.innerHTML = 'Player 1 Turn  <i class="fas fa-times"></i>';
-          this.turn.classList.remove('blue')
+          this.turn.classList.remove('blue');
           this.turn.classList.add('red');
-          this.state.push({ id: clickedSquare.id, player: this.player });
-          // console.log(this.state)
-          this.checkVictory(this.player);
+          this.player2array.push(Number(clickedSquare.id));
+
+          if(this.player2array.length >= 0)
+          {
+            this.checkVictory(this.player2array, this.player);
+          }
+
+          this.counter++;
           this.player--;
+          
+        }
+
+        if(this.counter === 9)
+        {
+          this.draw();
         }
 
       });
     });
+
+    this.button.addEventListener('click', this.playAgain);
   }
 
-  checkVictory = (player) => {
+  checkVictory = (playerArray, player) => {
 
-
-    const winningPatterns = [
-      // Horizontal Top Row
-      [{ id: 1, player: player }, { id: 2, player: player }, { id: 3, player: player }],
-      
-      // Horizontal Middle Row
-      [{ id: 4, player: player }, { id: 5, player: player }, { id: 6, player: player }],
-      
-      // Horizontal Bottom Row
-      [{ id: 7, player: player }, { id: 8, player: player }, { id: 9, player: player }],
-      
-      // Vertical Left Column
-      [{ id: 1, player: player }, { id: 4, player: player }, { id: 7, player: player }],
-      
-      // Vertical Middle Column
-      [{ id: 2, player: player }, { id: 5, player: player }, { id: 8, player: player }],
-      
-      // Vertical Right Column
-      [{ id: 3, player: player }, { id: 6, player: player }, { id: 9, player: player }],
-      
-      // Diagonal Top Left to Bottom Right
-      [{ id: 1, player: player }, { id: 5, player: player }, { id: 9, player: player }],
-      
-      // Diagonal Top Right to Bottom Left
-      [{ id: 3, player: player }, { id: 5, player: player }, { id: 7, player: player }]
-    ];
-
-     for(let i = 0; i < winningPatterns.length; i++)
-     {
-       const winner = winningPatterns[i].every(winningItem =>
-         this.state.some(stateItem => 
-          stateItem.id === winningItem.id && stateItem.player === winningItem.player))
-          
-          if (winner) {
-            console.log(`Player ${player} wins!`);
-            break; 
-     }
+    for (let i = 0; i < this.winningPatterns.length; i++)
+    {
+      const currentPattern = this.winningPatterns[i];
+      const isWinner = currentPattern.every(index => playerArray.includes(index));
+  
+      if (isWinner)
+      {
+        this.counter--;
+        this.winGame(player);
+      }
 
     }
   }
 
+  winGame = (player) => {
+    this.modal.classList.toggle('hidden');
+    this.overlay.classList.toggle('hidden');
+    this.turn.innerHTML = "Game Over";
+    this.turn.classList.add('black');
+
+    if(player === 1)
+    {
+      this.victory.textContent = "Congratulations Player 1 You Win";
+      this.button.style.backgroundColor = "red";
+    }
+    else
+    {
+      this.victory.textContent = "Congratulations Player 2 You Win";
+      this.button.style.backgroundColor = "blue";
+    }
+  }
+
+  draw = () => {
+    this.modal.classList.toggle('hidden');
+    this.overlay.classList.toggle('hidden');
+    this.turn.innerHTML = "Game Over";
+    this.turn.classList.add('black');
+    this.victory.textContent = "Draw";
+    this.button.style.backgroundColor = "gray";
+    console.log('draw');
+  }
+
+  playAgain = () => {
+    this.square.forEach(square => {
+      square.innerHTML = '';
+    })
+
+    this.overlay.classList.add('hidden')
+    this.modal.classList.add('hidden')
+    this.turn.innerHTML = 'Player 1 Turn  <i class="fas fa-times"></i>';
+    this.turn.classList.add('red');
+    this.turn.classList.remove('blue');
+    this.turn.classList.remove('black');
+    this.player = 1;
+    this.player1array = [];
+    this.player2array = [];
+    this.counter = 0;
+  }
+
+
 }
 
-const action = new game(document.querySelectorAll(".square"), document.querySelector('#turn'));
+const action = new game(document.querySelectorAll(".square"), document.querySelector('#turn'), document.querySelector('#overlay'), document.querySelector('#modal'), document.querySelector('#victory'), document.querySelector('#button'));
