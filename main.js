@@ -42,12 +42,7 @@ class game {
           this.turn.classList.remove('red')
           this.turn.classList.add('blue');
           this.player1array.push(Number(clickedSquare.id));
-
-          if(this.player1array.length >= 0)
-          {
-            this.checkVictory(this.player1array, this.player);
-          }
-
+          this.checkVictory(this.player1array, this.player);
           this.counter++;
           this.player++;
           
@@ -63,13 +58,8 @@ class game {
           this.turn.innerHTML = 'Player 1 Turn  <i class="fas fa-times"></i>';
           this.turn.classList.remove('blue');
           this.turn.classList.add('red');
-          this.player2array.push(Number(clickedSquare.id));
-
-          if(this.player2array.length >= 0)
-          {
-            this.checkVictory(this.player2array, this.player);
-          }
-
+          this.player2array.push(Number(clickedSquare.id));     
+          this.checkVictory(this.player2array, this.player);
           this.counter++;
           this.player--;
           

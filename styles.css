@@ -98,3 +98,15 @@ h1 i {
 .hidden {
   display: none;
 }
+
+@keyframes animateModal {
+  from {
+    top: -300px;
+    opacity: 0;
+  }
+
+  to {
+    top: 50%;
+    opacity: 1;
+  }
+}
