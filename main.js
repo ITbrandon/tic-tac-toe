@@ -6,6 +6,7 @@ class game {
     this.modal = modal;
     this.victory = victory;
     this.button = button;
+    this.play();
     this.init();
     this.player = 1;
     this.player1array = [];
@@ -20,6 +21,11 @@ class game {
   }
 
   init = () => {
+    this.button.addEventListener('click', this.playAgain);
+  }
+
+  play = () => {
+
     this.square.forEach(square => {
       
       square.addEventListener('click', (event) => {
@@ -72,8 +78,6 @@ class game {
 
       });
     });
-
-    this.button.addEventListener('click', this.playAgain);
   }
 
   checkVictory = (playerArray, player) => {
@@ -81,7 +85,7 @@ class game {
     for (let i = 0; i < this.winningPatterns.length; i++)
     {
       const currentPattern = this.winningPatterns[i];
-      const isWinner = currentPattern.every(index => playerArray.includes(index));
+      const isWinner = currentPattern.every(element => playerArray.includes(element));
   
       if (isWinner)
       {
@@ -117,7 +121,6 @@ class game {
     this.turn.classList.add('black');
     this.victory.textContent = "Draw";
     this.button.style.backgroundColor = "gray";
-    console.log('draw');
   }
 
   playAgain = () => {
